@@ -1,4 +1,4 @@
-'''Assignment 3 (Version 1.1)
+'''Assignment 3 (Version 1.2)
 
 Please add your code where indicated. You may conduct a superficial test of
 your code by executing this file in a python interpreter.
@@ -271,7 +271,7 @@ class TestAssignment3(unittest.TestCase):
     def test_mentions_adjacency_matrix1(self):
         list_of_mentions = [['@nytimes'], ['@nytimes']]
         A = mentions_adjacency_matrix(list_of_mentions)
-        self.assertTrue(isinstance(A, np.array))
+        self.assertTrue(isinstance(A, np.ndarray))
 
 
 if __name__ == '__main__':
