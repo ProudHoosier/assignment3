@@ -1,4 +1,4 @@
-'''Assignment 3 (Version 1.0)
+'''Assignment 3 (Version 1.1)
 
 Please add your code where indicated. You may conduct a superficial test of
 your code by executing this file in a python interpreter.
@@ -15,6 +15,7 @@ This assignment requires the following packages:
 '''
 
 import os
+import string
 
 
 def load_nytimes_document_term_matrix_and_labels():
@@ -37,7 +38,7 @@ def load_nytimes_document_term_matrix_and_labels():
     """
     import pandas as pd
     nytimes = pd.read_csv(os.path.join('data', 'nytimes-art-music-simple.csv'), index_col=0)
-    labels = [document_name.rstrip(string.digits) for document_name in df.index]
+    labels = [document_name.rstrip(string.digits) for document_name in nytimes.index]
     return nytimes.values, labels
 
 
