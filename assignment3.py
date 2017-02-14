@@ -16,8 +16,8 @@ This assignment requires the following packages:
 
 import os
 import string
+import re
 import numpy as np
-import networkx as nx
 
 
 def load_nytimes_document_term_matrix_and_labels():
@@ -62,7 +62,7 @@ def normalize_document_term_matrix(document_term_matrix):
 
     """
     # YOUR CODE HERE
-	return document_term_matrix/np.sum(document_term_matrix, axis = 1)[:, np.newaxis]
+    return document_term_matrix/np.sum(document_term_matrix, axis = 1)[:, np.newaxis]
 
 
 
@@ -80,7 +80,14 @@ def distance_matrix(document_term_matrix):
 
     """
     # YOUR CODE HERE
+    size = document_term_matrix.shape
+    result = np.zeros((size[0], size[0]))
 
+    for i in range(size[0]):
+        for j in range(size[0]):
+            result[i,j] = np.linalg.norm(document_term_matrix[i] - document_term_matrix[j])
+
+    return result
 
 def jaccard_similarity_matrix(document_term_matrix):
     """Calculate a NxN similarity matrix given a document-term matrix with N rows.
@@ -101,7 +108,14 @@ def jaccard_similarity_matrix(document_term_matrix):
 
     """
     # YOUR CODE HERE
-    pass
+    size = document_term_matrix.shape
+    result = np.zeros((size[0], size[0]))
+
+    for i in range(size[0]):
+        for j in range(size[0]):
+            result[i,j] = np.linalg.norm(document_term_matrix[i] - document_term_matrix[j])
+
+    return result
 
 
 def nearest_neighbors_classifier(new_vector, document_term_matrix, labels):
@@ -119,8 +133,15 @@ def nearest_neighbors_classifier(new_vector, document_term_matrix, labels):
 
     """
     # YOUR CODE HERE
-    pass
-
+    size = document_term_matrix.shape[0]
+    min = 0
+    index = 0
+    for i in range(size):
+        if min > np.linalg.norm(document_term_matrix[i] - new_vector):
+            min = np.linalg.norm(document_term_matrix[i] - new_vector)
+            index = i
+    
+    return labels[index]
 
 def extract_hashtags(tweet):
     """Extract hashtags from a string.
@@ -139,7 +160,7 @@ def extract_hashtags(tweet):
 
     """
     # YOUR CODE HERE
-	return re.findall(r"\#\w+",tweet)
+    return re.findall(r"\#\w+",tweet)
 
 
 def extract_mentions(tweet):
@@ -160,9 +181,9 @@ def extract_mentions(tweet):
 
     """
     # YOUR CODE HERE
-	re.sub("[\w]+@[\w]+\.[\w]+", "", tweet)
-	re.findall(r"@[a-zA-Z0-9]{1,}", tweet)
-	
+    re.sub("[\w]+@[\w]+\.[\w]+", "", tweet)
+    return re.findall(r"@[a-zA-Z0-9]{1,}", tweet)
+
 
 def adjacency_matrix_from_edges(pairs):
     """Construct and adjacency matrix from a list of edges.
@@ -196,8 +217,10 @@ def adjacency_matrix_from_edges(pairs):
             array and a list.
 
     """
-    # YOUR CODE HERE		
-    return nx.Graph().add_edges_from(pairs), sorted((G.nodes())
+    # YOUR CODE HERE
+    G = nx.Graph()
+    G.add_edges_from(pairs)		
+    return nx.to_numpy_matrix(G), sorted(G.nodes())
 
 def mentions_adjacency_matrix(list_of_mentions):
     """Construct an adjacency matrix given lists of mentions.
@@ -229,6 +252,7 @@ def mentions_adjacency_matrix(list_of_mentions):
 
     """
     # YOUR CODE HERE
+
 
 
 
@@ -278,6 +302,11 @@ class TestAssignment3(unittest.TestCase):
         list_of_mentions = [['@nytimes'], ['@nytimes']]
         A = mentions_adjacency_matrix(list_of_mentions)
         self.assertTrue(isinstance(A, np.ndarray))
+
+    def test_nn(self):
+        result = nearest_neighbors_classifier([2, 2, 2], np.array([[3,3,3],[4,4,4]]), ['a','b'])
+        print(result)
+
 
 
 if __name__ == '__main__':
