@@ -206,7 +206,7 @@ def adjacency_matrix_from_edges(pairs):
 		
 	vertices |= (set(u)| set(v))
 			
-    G = nx.MultiDiGraph()
+    G = nx.Graph()
 	for edge in pairs:
 		G.add_edge(edge)
 	
