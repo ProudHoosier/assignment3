@@ -16,6 +16,8 @@ This assignment requires the following packages:
 
 import os
 import string
+import numpy as np
+import networkx as nx
 
 
 def load_nytimes_document_term_matrix_and_labels():
@@ -60,6 +62,7 @@ def normalize_document_term_matrix(document_term_matrix):
 
     """
     # YOUR CODE HERE
+	return document_term_matrix/np.sum(document_term_matrix, axis = 1)[:, np.newaxis]
 
 
 
@@ -136,6 +139,7 @@ def extract_hashtags(tweet):
 
     """
     # YOUR CODE HERE
+	return re.findall(r"\#\w+",tweet)
 
 
 def extract_mentions(tweet):
@@ -156,7 +160,9 @@ def extract_mentions(tweet):
 
     """
     # YOUR CODE HERE
-
+	re.sub("[\w]+@[\w]+\.[\w]+", "", tweet)
+	re.findall(r"@[a-zA-Z0-9]{1,}", tweet)
+	
 
 def adjacency_matrix_from_edges(pairs):
     """Construct and adjacency matrix from a list of edges.
@@ -191,7 +197,21 @@ def adjacency_matrix_from_edges(pairs):
 
     """
     # YOUR CODE HERE
-
+	u = []
+	v = []
+	vertices = {}
+	for edge in pairs:
+		u.append(edge[0])
+		v.append(edge[1])
+		
+	vertices |= (set(u)| set(v))
+			
+    G = nx.MultiDiGraph()
+	for edge in pairs:
+		G.add_edge(edge)
+	
+	result = nx.to_numpy_matrix(G, nodelist=list(vertices))	
+	return result, sorted(list(vertices))
 
 def mentions_adjacency_matrix(list_of_mentions):
     """Construct an adjacency matrix given lists of mentions.
