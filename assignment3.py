@@ -196,22 +196,8 @@ def adjacency_matrix_from_edges(pairs):
             array and a list.
 
     """
-    # YOUR CODE HERE
-	u = []
-	v = []
-	vertices = {}
-	for edge in pairs:
-		u.append(edge[0])
-		v.append(edge[1])
-		
-	vertices |= (set(u)| set(v))
-			
-    G = nx.Graph()
-	for edge in pairs:
-		G.add_edge(edge)
-	
-	result = nx.to_numpy_matrix(G, nodelist=list(vertices))	
-	return result, sorted(list(vertices))
+    # YOUR CODE HERE		
+    return nx.Graph().add_edges_from(pairs), sorted((G.nodes())
 
 def mentions_adjacency_matrix(list_of_mentions):
     """Construct an adjacency matrix given lists of mentions.
