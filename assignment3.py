@@ -108,15 +108,16 @@ def jaccard_similarity_matrix(document_term_matrix):
 
     """
     # YOUR CODE HERE
-    size = document_term_matrix.shape
-    result = np.zeros((size[0], size[0]))
-
     for i in range(size[0]):
         for j in range(size[0]):
-            result[i,j] = np.linalg.norm(document_term_matrix[i] - document_term_matrix[j])
+            im1 = np.asarray(document_term_matrix[i]).astype(np.bool)
+            im2 = np.asarray(document_term_matrix[j]).astype(np.bool)
 
-    return result
+    intersection = np.logical_and(im1, im2)
 
+    union = np.logical_or(im1, im2)
+
+    return intersection.sum() / float(union.sum())
 
 def nearest_neighbors_classifier(new_vector, document_term_matrix, labels):
     """Return a predicted label for `new_vector`.
